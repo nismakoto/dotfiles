@@ -96,7 +96,7 @@ let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 "------------------------------------------------
 let g:clang_complete_auto=0
 let g:clang_use_library=1
-let g:clang_library_path='/home/makoto/Downloads/clang+llvm-3.3-amd64-debian6/lib'
+let g:clang_library_path='/usr/lib'
 let g:indent_guides_enable_on_vim_startup=1
 let g:indent_guides_start_level=2
 let g:indent_guides_auto_colors=0

@@ -91,7 +91,7 @@ alias lpr_duplex='lpr -o Duplex=DuplexNoTumble'
 # Git
 #################################################
 export GIT_EDITOR=vim
-export GIT_AUTHOR_NAME="NISHINO Makoto"
+export GIT_AUTHOR_NAME="Makoto NISHINO"
 # export GIT_AUTHOR_EMAIL=""
 export EDITOR="vim"
 
