@@ -91,18 +91,3 @@ alias lpr_duplex='lpr -o Duplex=DuplexNoTumble'
 # Git
 #################################################
 export GIT_EDITOR=vim
-export GIT_AUTHOR_NAME="Makoto NISHINO"
-# export GIT_AUTHOR_EMAIL=""
-export EDITOR="vim"
-
-#################################################
-# Android
-#################################################
-export ANDROID_HOME=${HOME}/android-sdk-linux
-export PATH=$ANDROID_HOME/tools:$PATH
-export PATH=$ANDROID_HOME/platform-tools:$PATH
-
-#################################################
-# Development
-#################################################
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
