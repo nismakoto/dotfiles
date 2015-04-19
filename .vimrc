@@ -1,15 +1,23 @@
 set t_Co=256
 
 "------------------------------------------------
+" Back up
+"------------------------------------------------
+" set backup
+" set backupdir=$HOME/.vimbackup
+" set browsedir=buffer
+" set directory=$HOME/.vimbackup
+
+"------------------------------------------------
 " Indent
 "------------------------------------------------
 set autoindent
 set smartindent
 set smarttab
 set expandtab
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 
 "------------------------------------------------
 " Display
@@ -21,6 +29,7 @@ set showmatch
 set laststatus=2
 "set visualbell t_vb=
 set noerrorbells
+set clipboard+=unnamed
 
 "------------------------------------------------
 " Search
@@ -78,15 +87,14 @@ if has('vim_starting')
   if &compatible
     set nocompatible
   endif
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  set runtimepath+=$HOME/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#begin(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('$HOME/.vim/bundle/'))
 
 let g:neobundle_default_git_protocol='https'
 
 NeoBundleFetch 'https://github.com/Shougo/neobundle.vim.git'
-NeoBundle 'https://github.com/Shougo/vimproc.git'
 NeoBundle 'https://github.com/Shougo/vimshell.git'
 NeoBundle 'https://github.com/Shougo/vimfiler.vim.git'
 NeoBundle 'https://github.com/Shougo/neocomplete.vim.git'
@@ -106,6 +114,78 @@ NeoBundle 'https://github.com/vim-scripts/vim-auto-save.git'
 NeoBundle 'https://github.com/twerth/ir_black.git'
 NeoBundle 'https://github.com/tomasr/molokai.git'
 NeoBundle 'https://github.com/w0ng/vim-hybrid.git'
+
+"------------------------------------------------
+" vimproc
+"------------------------------------------------
+" vimproc {{{
+NeoBundle 'Shougo/vimproc', {
+\    'build' : {
+\        'mac'  : 'make -f make_mac.mak',
+\        'unix' : 'make -f make_unix.mak',},}
+
+"------------------------------------------------
+" vim-quickrun
+"------------------------------------------------
+NeoBundle 'scrooloose/syntastic'
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
+
+"------------------------------------------------
+" vim-quickrun
+"------------------------------------------------
+NeoBundle 'thinca/vim-quickrun'
+let g:quickrun_config={'*': {'split': ''}}
+let g:quickrun_config._={ 'runner':'vimproc',
+\       "runner/vimproc/updatetime" : 10,
+\       "outputter/buffer/close_on_empty" : 1,
+\ }
+
+"------------------------------------------------
+" vim-php-cs-fixer
+"------------------------------------------------
+NeoBundleLazy 'stephpy/vim-php-cs-fixer', {
+\    'autoload' : {
+\        'filetypes': 'php',},}
+let s:hooks = neobundle#get_hooks('vim-php-cs-fixer')
+function! s:hooks.on_source(bundle)
+    let g:php_cs_fixer_path = '$HOME/.vim/php-cs-fixer' " define the path to the php-cs-fixer.phar
+    let g:php_cs_fixer_level='all'              " which level ?
+    let g:php_cs_fixer_config='default'         " configuration
+    let g:php_cs_fixer_php_path='php'           " Path to PHP
+    " If you want to define specific fixers:
+    "let g:php_cs_fixer_fixers_list = 'linefeed,short_tag,indentation'
+    let g:php_cs_fixer_enable_default_mapping=1 " Enable the mapping by default (<leader>pcd)
+    let g:php_cs_fixer_dry_run=0                " Call command with dry-run option
+    let g:php_cs_fixer_verbose=0                " Return the output of command if 1, else an inline information.
+    nnoremap <Leader>php :call PhpCsFixerFixFile()<CR>
+endfunction
+unlet s:hooks
+
+"------------------------------------------------
+" neosnippet.vim & neosnippet-snippets
+"------------------------------------------------
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
+
 
 call neobundle#end()
 
@@ -239,8 +319,8 @@ let g:lightline = {
       \   'modified': 'MyModified',
       \   'filename': 'MyFilename'
       \ },
-      \ 'separator': { 'left': ' ', 'right': '' },
-      \ 'subseparator': { 'left': ' ', 'right': '' }
+      \ 'separator': { 'left': "\u2b80", 'right': "\u2b82" },
+      \ 'subseparator': { 'left': "\u2b81", 'right': "\u2b83" }
       \ }
 
 function! MyModified()
@@ -259,7 +339,7 @@ function! MyReadonly()
   if &filetype == "help"
     return ""
   elseif &readonly
-    return ""
+    return "\u2b64"
   else
     return ""
   endif
@@ -268,7 +348,7 @@ endfunction
 function! MyFugitive()
   if exists("*fugitive#head")
     let _ = fugitive#head()
-    return strlen(_) ? ' '._ : ''
+    return strlen(_) ? '\u2b60 '._ : ''
   endif
   return ''
 endfunction
